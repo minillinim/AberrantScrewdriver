@@ -1,0 +1,14 @@
+---
+- name: Creates a folder for android studio
+  file: path=~/android state=directory
+
+- name: Download android studio and unzip
+  get_url: url=https://dl.google.com/dl/android/studio/ide-zips/1.4.0.10/android-studio-ide-141.2288178-linux.zip dest=~/android mode=0440
+  unarchive: src=~/android/android-studio-ide-141.2288178-linux.zip dest=~/android
+
+- name: Add androis studio to PATH variable
+  lineinfile:
+    dest=~/.bashrc
+    line="export PATH=~/android/android-studio/bin:$PATH"
+    state=present
+    insertafter=EOF
