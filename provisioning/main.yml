@@ -9,3 +9,4 @@
   tasks:
     - include: java.yml
     - include: android.yml
+    - include: utils.yml

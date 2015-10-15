@@ -5,6 +5,6 @@
   sudo: yes
 
 - name: Install Java8 and set as default
-  apt: name=oracle-java8-installer state=present
-  apt: name=oracle-java8-set-default state=present
+  apt: name=oracle-java8-installer state=latest
+  apt: name=oracle-java8-set-default state=latest
   sudo: yes
