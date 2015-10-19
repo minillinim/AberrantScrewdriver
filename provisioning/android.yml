@@ -1,14 +1,32 @@
 ---
+# See http://stackoverflow.com/questions/28847151/unable-to-install-android-studio-in-ubuntu
+- name: Add 32 bit libraries to avoid pain
+  apt: pkg={{item}} state=installed
+  with_items:
+       - lib32z1
+       - lib32ncurses5
+       - lib32bz2-1.0
+       - lib32stdc++6
+  sudo: yes
+
 - name: Creates a folder for android studio
-  file: path=~/android state=directory
+  file: path={{ android_home }} state=directory
 
-- name: Download android studio and unzip
-  get_url: url=https://dl.google.com/dl/android/studio/ide-zips/1.4.0.10/android-studio-ide-141.2288178-linux.zip dest=~/android mode=0440
-  unarchive: src=~/android/android-studio-ide-141.2288178-linux.zip dest=~/android
+- name: Check android studio is downloaded
+  stat: path={{ android_home }}/{{ studio_zip }}
+  register: as_path
 
-- name: Add androis studio to PATH variable
+- name: Download android studio
+  get_url: url={{ studio_url }}/{{ studio_zip }} dest={{ android_home }} mode=0440
+  when: as_path.stat.exists == false
+
+# always clobber?
+- name: Unzip android studio
+  unarchive: src={{ android_home }}/{{ studio_zip }} dest={{ android_home }} copy=no
+
+- name: Add android studio to PATH variable
   lineinfile:
-    dest=~/.bashrc
-    line="export PATH=~/android/android-studio/bin:$PATH"
+    dest={{ vagrant_home }}/.bashrc
+    line="export PATH={{ android_home }}/android-studio/bin:$PATH"
     state=present
     insertafter=EOF

@@ -2,6 +2,13 @@
 - hosts: all
   sudo: yes
 
+  vars:
+    vagrant_home: /home/vagrant
+    android_home: "{{ vagrant_home }}/android"
+    studio_version: 141.2288178
+    studio_zip: android-studio-ide-{{ studio_version }}-linux.zip
+    studio_url: https://dl.google.com/dl/android/studio/ide-zips/1.4.0.10
+
   pre_tasks:
     - name: Update apt cache if needed.
       apt: update_cache=yes cache_valid_time=3600

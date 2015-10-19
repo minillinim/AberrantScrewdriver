@@ -1,10 +1,23 @@
 ---
 - name: Add Java8 ppa
   apt_repository: repo='ppa:webupd8team/java'
+  sudo: yes
+
+- name: Update cache
   apt: update_cache=yes cache_valid_time=3600
   sudo: yes
 
-- name: Install Java8 and set as default
+# see http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
+- name: Preaccept the Java8 license part 1
+  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+
+- name: Preaccept the Java8 license part 2
+  shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+
+- name: Install Java8
   apt: name=oracle-java8-installer state=latest
+  sudo: yes
+
+- name: Set Java8 as default
   apt: name=oracle-java8-set-default state=latest
   sudo: yes
